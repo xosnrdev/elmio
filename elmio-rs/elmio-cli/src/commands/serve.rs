@@ -174,18 +174,18 @@ fn read_request(stream: &mut TcpStream) -> Result<Request<()>, String> {
         req_reader
             .read_until(b'\n', &mut buffer)
             .map_err(|err| format!("Failed to read request: {:?}", err))?;
-        if buffer.ends_with(&vec![b'\r', b'\n', b'\r', b'\n']) {
+        if buffer.ends_with(b"\r\n\r\n") {
             break;
         }
     }
 
     let mut headers = [httparse::EMPTY_HEADER; 64];
     let mut req = httparse::Request::new(&mut headers);
-    req.parse(&mut buffer).unwrap();
+    req.parse(&buffer).unwrap();
 
     let req = request::Builder::new()
-        .method(req.method.unwrap_or_else(|| "GET"))
-        .uri(req.path.unwrap_or_else(|| "/"))
+        .method(req.method.unwrap_or("GET"))
+        .uri(req.path.unwrap_or("/"))
         .body(())
         .unwrap();
 
@@ -203,15 +203,14 @@ fn match_route(config: &Config, req: &Request<()>) -> Option<Route> {
     config
         .routes
         .iter()
-        .filter(|route| {
+        .find(|route| {
             let route_parts = path_to_parts(&route.path);
             compare_path_paths(&req_parts, &route_parts)
         })
-        .next()
         .cloned()
 }
 
-fn compare_path_paths(req_parts: &Vec<String>, route_parts: &Vec<String>) -> bool {
+fn compare_path_paths(req_parts: &[String], route_parts: &[String]) -> bool {
     if req_parts.len() == route_parts.len() {
         req_parts
             .iter()
@@ -241,7 +240,7 @@ fn prepare_response_body(config: &Config, req: &Request<()>) -> Result<Body, Str
             fs::read(&file_path).map_err(|err| format!("Failed to read file: {}", err))?;
         let content_type = mime_guess::from_path(&file_path)
             .first()
-            .unwrap_or_else(|| mime_guess::mime::APPLICATION_OCTET_STREAM);
+            .unwrap_or(mime_guess::mime::APPLICATION_OCTET_STREAM);
         Ok(Body {
             content,
             content_type,
@@ -249,7 +248,7 @@ fn prepare_response_body(config: &Config, req: &Request<()>) -> Result<Body, Str
     } else if file_path.ends_with("favicon.ico") {
         let content_type = mime_guess::from_ext("ico")
             .first()
-            .unwrap_or_else(|| mime_guess::mime::APPLICATION_OCTET_STREAM);
+            .unwrap_or(mime_guess::mime::APPLICATION_OCTET_STREAM);
 
         Ok(Body {
             content: favicon(),
@@ -279,7 +278,7 @@ fn body_from_route(req: &Request<()>, route: &Route) -> Result<Body, String> {
 
 fn file_path_from_req(config: &Config, req: &Request<()>) -> Result<PathBuf, String> {
     let req_path = req.uri().path().trim_start_matches("/");
-    let abs_path = config.static_base_path.join(&req_path);
+    let abs_path = config.static_base_path.join(req_path);
 
     if Path::new(&abs_path).is_dir() {
         Ok(Path::new(&abs_path).join("index.html"))
@@ -299,5 +298,5 @@ fn listen_port_from_str(s: &str) -> u32 {
 
 fn favicon() -> Vec<u8> {
     let encoded = "AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA//8AAP//AAD//wAA";
-    BASE64_STANDARD.decode(&encoded).unwrap()
+    BASE64_STANDARD.decode(encoded).unwrap()
 }

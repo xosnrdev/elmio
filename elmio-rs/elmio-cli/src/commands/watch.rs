@@ -54,11 +54,11 @@ pub fn _watch(mut config: Config) -> Result<(), Error> {
             Err(err) => handle_error(err),
         }
     })
-    .map_err(|err| Error::Notify(err))?;
+    .map_err(Error::Notify)?;
 
     watcher
         .watch(Path::new("."), RecursiveMode::Recursive)
-        .map_err(|err| Error::Notify(err))?;
+        .map_err(Error::Notify)?;
 
     loop {
         let mut input = String::new();
@@ -67,18 +67,18 @@ pub fn _watch(mut config: Config) -> Result<(), Error> {
 }
 
 fn on_event(config: &mut Config, event_result: Result<Event, notify::Error>) -> Result<(), Error> {
-    let event = event_result.map_err(|err| Error::Notify(err))?;
+    let event = event_result.map_err(Error::Notify)?;
     let file_path = filepath_from_event(&event)?;
     let rel_path = file_path
         .strip_prefix(&config.current_dir)
-        .map_err(|err| Error::RelativePath(err))?;
+        .map_err(Error::RelativePath)?;
 
-    let change_type = classify_file(&config, rel_path)?;
+    let change_type = classify_file(config, rel_path)?;
 
     println!(
         "{:?} triggered by {}",
         change_type,
-        rel_path.to_string_lossy().to_string()
+        rel_path.to_string_lossy()
     );
 
     if let Err(err) = config.builder.run(change_type) {
@@ -154,44 +154,33 @@ fn is_ignored_by_git(config: &Config, path: &Path) -> bool {
 
 fn filepath_from_event(event: &Event) -> Result<PathBuf, Error> {
     match &event.kind {
-        EventKind::Create(create_kind) => match create_kind {
-            CreateKind::File => {
-                let path = event
-                    .paths
-                    .first()
-                    .ok_or(Error::EventFilePath(event.clone()))?;
+        EventKind::Create(CreateKind::File) => {
+            let path = event
+                .paths
+                .first()
+                .ok_or(Error::EventFilePath(event.clone()))?;
 
-                Ok(path.clone())
-            }
+            Ok(path.clone())
+        }
+        EventKind::Create(_) => Err(Error::IgnoredEvent(event.clone())),
 
-            _ => Err(Error::IgnoredEvent(event.clone())),
-        },
+        EventKind::Modify(ModifyKind::Data(DataChange::Content)) => {
+            let path = event
+                .paths
+                .first()
+                .ok_or(Error::EventFilePath(event.clone()))?;
 
-        EventKind::Modify(modify_kind) => match modify_kind {
-            ModifyKind::Data(data_change) => match data_change {
-                DataChange::Content => {
-                    let path = event
-                        .paths
-                        .first()
-                        .ok_or(Error::EventFilePath(event.clone()))?;
+            Ok(path.clone())
+        }
+        EventKind::Modify(ModifyKind::Name(_)) => {
+            let path = event
+                .paths
+                .first()
+                .ok_or(Error::EventFilePath(event.clone()))?;
 
-                    Ok(path.clone())
-                }
-
-                _ => Err(Error::IgnoredEvent(event.clone())),
-            },
-
-            ModifyKind::Name(_) => {
-                let path = event
-                    .paths
-                    .first()
-                    .ok_or(Error::EventFilePath(event.clone()))?;
-
-                Ok(path.clone())
-            }
-
-            _ => Err(Error::IgnoredEvent(event.clone())),
-        },
+            Ok(path.clone())
+        }
+        EventKind::Modify(_) => Err(Error::IgnoredEvent(event.clone())),
 
         EventKind::Remove(_) => {
             let path = event

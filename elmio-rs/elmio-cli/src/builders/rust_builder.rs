@@ -85,7 +85,7 @@ pub struct RustBuilder {
 
 impl RustBuilder {
     pub fn new(config: Config) -> Self {
-        Self { config: config }
+        Self { config }
     }
 
     fn build_dev(&self) -> Result<(), Error> {
@@ -205,9 +205,9 @@ impl RustBuilder {
     fn prepare_dirs(&self) -> Result<(), Error> {
         fs::create_dir_all(&self.config.frontend_dist_path).map_err(Error::CreateDistDir)?;
         fs::create_dir_all(&self.config.backend_dist_path).map_err(Error::CreateDistDir)?;
-        fs::create_dir_all(&self.config.web_project_wasm_frontend_path())
+        fs::create_dir_all(self.config.web_project_wasm_frontend_path())
             .map_err(Error::CreateWebWasmDir)?;
-        fs::create_dir_all(&self.config.web_project_wasm_backend_path())
+        fs::create_dir_all(self.config.web_project_wasm_backend_path())
             .map_err(Error::CreateWebWasmDir)?;
 
         Ok(())
@@ -215,7 +215,7 @@ impl RustBuilder {
 
     fn copy_wasm_to_frontend_dist(&self) -> Result<(), Error> {
         fs_extra::dir::copy(
-            &self.config.web_project_wasm_frontend_path(),
+            self.config.web_project_wasm_frontend_path(),
             &self.config.frontend_dist_path,
             &fs_extra::dir::CopyOptions {
                 overwrite: true,
@@ -229,7 +229,7 @@ impl RustBuilder {
 
     fn copy_wasm_to_backend_dist(&self) -> Result<(), Error> {
         fs_extra::dir::copy(
-            &self.config.web_project_wasm_backend_path(),
+            self.config.web_project_wasm_backend_path(),
             &self.config.backend_dist_path,
             &fs_extra::dir::CopyOptions {
                 overwrite: true,

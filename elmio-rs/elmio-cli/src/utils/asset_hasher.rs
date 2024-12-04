@@ -2,7 +2,7 @@ use std::{
     ffi::OsStr,
     fs, io,
     ops::Deref,
-    path::{PathBuf, StripPrefixError},
+    path::{Path, PathBuf, StripPrefixError},
 };
 
 use regex::Regex;
@@ -57,7 +57,7 @@ impl AssetHasher {
             .collect::<Result<Vec<HashedAsset>, Error>>()
     }
 
-    pub fn replace_checksum_in_source_files(&self, assets: &Vec<HashedAsset>) -> Result<(), Error> {
+    pub fn replace_checksum_in_source_files(&self, assets: &[HashedAsset]) -> Result<(), Error> {
         let rust_files = self.collect_files_by_ext(&self.config.core_project_path_src, "rs");
         let typescript_files = self.collect_files_by_ext(&self.config.web_project_path_src, "ts");
         let css_files = self.collect_files_by_ext(&self.config.web_project_path_css, "css");
@@ -65,7 +65,7 @@ impl AssetHasher {
         let files = [rust_files, typescript_files, css_files].concat();
 
         for path in files {
-            self.replace_checksum_in_file(&path, &assets)?;
+            self.replace_checksum_in_file(&path, assets)?;
         }
 
         Ok(())
@@ -83,12 +83,12 @@ impl AssetHasher {
             .collect()
     }
 
-    fn get_dist_uri(&self, dist_path: &PathBuf, path: &PathBuf) -> Result<String, Error> {
+    fn get_dist_uri(&self, dist_path: &PathBuf, path: &Path) -> Result<String, Error> {
         let rel_path = path
             .strip_prefix(dist_path)
             .map_err(Error::StripPathPrefix)?;
 
-        Ok(format!("/{}", rel_path.to_string_lossy().to_string()))
+        Ok(format!("/{}", rel_path.to_string_lossy()))
     }
 
     fn collect_files_by_ext(&self, path: &PathBuf, extension: &str) -> Vec<PathBuf> {
@@ -141,9 +141,9 @@ impl AssetHasher {
     fn replace_checksum_in_file(
         &self,
         file_path: &PathBuf,
-        assets: &Vec<HashedAsset>,
+        assets: &[HashedAsset],
     ) -> Result<(), Error> {
-        let old_file = file_util::read(&file_path).map_err(Error::ReadFile)?;
+        let old_file = file_util::read(file_path).map_err(Error::ReadFile)?;
         let mut file_was_changed = false;
 
         let new_content = old_file
@@ -182,7 +182,7 @@ impl AssetHasher {
                 permissions: old_file.permissions,
             };
 
-            file_util::write(&file_path, new_file).map_err(Error::WriteSourceFile)?;
+            file_util::write(file_path, new_file).map_err(Error::WriteSourceFile)?;
         }
 
         Ok(())

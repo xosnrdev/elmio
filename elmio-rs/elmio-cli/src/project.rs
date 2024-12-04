@@ -27,7 +27,7 @@ pub struct Project {
 pub enum Error {
     InvalidProjectName,
     TempDir(io::Error),
-    GetUrl(ureq::Error),
+    GetUrl(Box<ureq::Error>),
     ReadResponse(io::Error),
     ZipExtract(zip_extract::ZipExtractError),
     ReadFile(io::Error),
@@ -173,7 +173,7 @@ impl Template {
 fn download_file(template_info: &TemplateInfo) -> Result<Vec<u8>, Error> {
     let response = ureq::get(&template_info.url)
         .call()
-        .map_err(Error::GetUrl)?;
+        .map_err(|err| Error::GetUrl(Box::new(err)))?;
 
     let mut buffer = Vec::new();
 
@@ -202,14 +202,12 @@ fn replace_placeholders(
     paths
         .files
         .iter()
-        .map(|path| replace_placeholder_in_file(project_name, template_info, path))
-        .collect::<Result<(), Error>>()?;
+        .try_for_each(|path| replace_placeholder_in_file(project_name, template_info, path))?;
 
     paths
         .dirs
         .iter()
-        .map(|path| replace_placeholder_in_dir(project_name, template_info, path))
-        .collect::<Result<(), Error>>()?;
+        .try_for_each(|path| replace_placeholder_in_dir(project_name, template_info, path))?;
 
     Ok(())
 }
@@ -251,14 +249,14 @@ fn replace_placeholder_in_file(
 
     let new_content = old_file
         .content
-        .replace(&template_info.placeholder, &project_name);
+        .replace(&template_info.placeholder, project_name);
 
     let new_file = file_util::FileData {
         content: new_content,
         permissions: old_file.permissions,
     };
 
-    file_util::write(&file_path, new_file).map_err(Error::WriteFile)?;
+    file_util::write(file_path, new_file).map_err(Error::WriteFile)?;
 
     Ok(())
 }
@@ -271,7 +269,7 @@ fn replace_placeholder_in_dir(
     let dir_name = dir_path.file_name().and_then(|name| name.to_str());
 
     if let Some(old_dir_name) = dir_name {
-        let new_dir_name = old_dir_name.replace(&template_info.placeholder, &project_name);
+        let new_dir_name = old_dir_name.replace(&template_info.placeholder, project_name);
         let new_dir_path = dir_path.with_file_name(&new_dir_name);
 
         if new_dir_name != old_dir_name {
@@ -284,7 +282,7 @@ fn replace_placeholder_in_dir(
 
 fn copy_to_dest(project_name: &str, template_dir: &PathBuf, dest: &PathBuf) -> Result<(), Error> {
     let tmp_project_path = template_dir.with_file_name(project_name);
-    fs::rename(&template_dir, &tmp_project_path).map_err(Error::RenameTemplateDir)?;
+    fs::rename(template_dir, &tmp_project_path).map_err(Error::RenameTemplateDir)?;
 
     fs_extra::dir::copy(tmp_project_path, dest, &fs_extra::dir::CopyOptions::new())
         .map_err(Error::CopyToDestination)?;
@@ -293,9 +291,9 @@ fn copy_to_dest(project_name: &str, template_dir: &PathBuf, dest: &PathBuf) -> R
 }
 
 fn copy_page_template(
-    template_base_path: &PathBuf,
+    template_base_path: &Path,
     template_page_name: &PageName,
-    base_path: &PathBuf,
+    base_path: &Path,
     page_name: &PageName,
     file_ext: &str,
 ) -> Result<(), Error> {
@@ -306,7 +304,7 @@ fn copy_page_template(
     let template_file =
         file_util::read(&template_home_page_path).map_err(Error::ReadCoreHomePage)?;
 
-    let new_content = replace_page_name(&template_file.content, &template_page_name, &page_name);
+    let new_content = replace_page_name(&template_file.content, template_page_name, page_name);
 
     let page_file = file_util::FileData {
         content: new_content,
@@ -326,19 +324,19 @@ fn copy_page_template(
     Ok(())
 }
 
-fn add_page_to_lib(base_path: &PathBuf, page_name: &PageName) -> Result<(), Error> {
+fn add_page_to_lib(base_path: &Path, page_name: &PageName) -> Result<(), Error> {
     let lib_path = base_path.join("src/lib.rs");
     let lib_file = file_util::read(&lib_path).map_err(Error::ReadLibFile)?;
     let page_module = format!("pub mod {};", page_name.snake_case());
 
     let mut new_content = lib_file.content;
     if !new_content.ends_with('\n') {
-        new_content.push_str("\n");
+        new_content.push('\n');
     }
 
     if !new_content.contains(&page_module) {
         new_content.push_str(&page_module);
-        new_content.push_str("\n");
+        new_content.push('\n');
     }
 
     file_util::write(
@@ -358,7 +356,7 @@ fn validate_name(name: &str) -> Result<(), Error> {
     let has_valid_chars = name.chars().all(|c| c.is_ascii_lowercase() || c == '_');
     let first_char_is_ascii = name
         .chars()
-        .nth(0)
+        .next()
         .map(|c| c.is_ascii_lowercase())
         .unwrap_or(false);
 
