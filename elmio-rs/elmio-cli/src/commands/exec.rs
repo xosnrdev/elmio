@@ -33,7 +33,7 @@ impl fmt::Display for Error {
                 if let Some(exit_status) = exit_status {
                     output.push_str(&format!("Command failed with status: {}\n", exit_status));
                 } else {
-                    output.push_str(&format!("Command failed\n"));
+                    output.push_str("Command failed\n");
                 }
 
                 if !stdout.is_empty() {
@@ -76,13 +76,13 @@ pub fn run(config: &Config) -> Result<String, Error> {
         .current_dir(&config.work_dir)
         .args(&config.args)
         .output()
-        .map(|output| Output(output))
+        .map(Output)
         .map_err(Error::FailedToExecute)
         .and_then(|output| output.read_stdout())
 }
 
 fn log(config: &Config) {
-    if config.args.len() > 0 {
+    if !config.args.is_empty() {
         let args = config.args.join(" ");
         println!("Executing: {} {}", config.cmd, args);
     } else {

@@ -1,4 +1,7 @@
-use std::{path::PathBuf, process};
+use std::{
+    path::{Path, PathBuf},
+    process,
+};
 
 use clap::{command, Parser, Subcommand};
 use elmio_cli::{
@@ -247,11 +250,11 @@ fn main() {
                 process::exit(1);
             }
 
-            post_build_runner.as_ref().map(|runner| {
+            if let Some(runner) = post_build_runner.as_ref() {
                 runner
                     .run(script_runner::Event::BeforeAssetHash)
                     .expect("Post build runner failed")
-            });
+            }
 
             let builder = BacklogBuilder::new(backlog_builder::Config {
                 rust_builder,
@@ -293,7 +296,7 @@ fn hash_assets_helper(
     rust_builder: &RustBuilder,
     web_builder: &WebBuilder,
     script: &Option<String>,
-    current_dir: &PathBuf,
+    current_dir: &Path,
     env: &Env,
 ) {
     let assets = asset_hasher.collect_hashed_dist_assets().unwrap();
@@ -306,7 +309,7 @@ fn hash_assets_helper(
 
     if let Some(script_name) = &script {
         let script_path = current_dir.join(script_name);
-        let script_runner = ScriptRunner::new(script_path, &env);
+        let script_runner = ScriptRunner::new(script_path, env);
         script_runner
             .run(script_runner::Event::AfterAssetHash)
             .expect("Post build runner failed");
@@ -327,5 +330,5 @@ fn print_project_info(info: &ProjectInfo) {
         "[Cloudflare project dir] {}",
         info.cloudflare_project_path.display()
     );
-    println!("");
+    println!();
 }

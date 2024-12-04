@@ -140,6 +140,12 @@ pub struct State {
     backlog: Mutex<HashSet<ChangeType>>,
 }
 
+impl Default for State {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl State {
     pub fn new() -> Self {
         Self {
@@ -185,9 +191,7 @@ impl BuildType {
         let only_typescript = HashSet::from([ChangeType::TypeScript]);
         let only_css = HashSet::from([ChangeType::Css]);
 
-        if changes == only_typescript {
-            BuildType::OnlyWeb
-        } else if changes == only_css {
+        if changes == only_typescript || changes == only_css {
             BuildType::OnlyWeb
         } else {
             BuildType::All

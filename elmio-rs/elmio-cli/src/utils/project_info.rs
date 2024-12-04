@@ -27,11 +27,11 @@ pub struct ProjectInfo {
 }
 
 impl ProjectInfo {
-    pub fn from_dir(current_dir: &PathBuf) -> Result<ProjectInfo, Error> {
+    pub fn from_dir(current_dir: &Path) -> Result<ProjectInfo, Error> {
         current_dir
             .is_absolute()
             .then_some(())
-            .ok_or(Error::CurrentDirNotAbsolute(current_dir.clone()))?;
+            .ok_or(Error::CurrentDirNotAbsolute(current_dir.to_path_buf()))?;
 
         let cargo_workspace = CargoWorkspaceConfig::from_cargo_toml(current_dir)?;
         let project_name = cargo_workspace.project_name().ok_or(Error::NoProjectName)?;
@@ -81,7 +81,7 @@ pub struct CargoWorkspaceConfig {
 }
 
 impl CargoWorkspaceConfig {
-    pub fn from_cargo_toml(path: &PathBuf) -> Result<Self, Error> {
+    pub fn from_cargo_toml(path: &Path) -> Result<Self, Error> {
         let cargo_workspace_path = path.join("Cargo.toml");
         let cargo_workspace_toml =
             fs::read_to_string(cargo_workspace_path).map_err(Error::ReadCargoWorkspace)?;
