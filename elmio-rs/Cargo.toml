@@ -9,7 +9,7 @@ repository = "https://github.com/xosnrdev/elmio"
 edition = "2021"
 
 [workspace.dependencies]
-serde = { version = "1.0.214", features = ["derive"] }
+serde = { version = "1.0.217", features = ["derive"] }
 
 [profile.release]
 lto = true
