@@ -1,7 +1,7 @@
 use std::{
     convert::identity,
     fmt, fs,
-    io::{self, Cursor},
+    io::{self, Cursor, Read},
     path::{Path, PathBuf},
 };
 
@@ -178,6 +178,7 @@ fn download_file(template_info: &TemplateInfo) -> Result<Vec<u8>, Error> {
     let mut buffer = Vec::new();
 
     response
+        .into_body()
         .into_reader()
         .read_to_end(&mut buffer)
         .map_err(Error::ReadResponse)?;
