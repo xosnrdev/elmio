@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["elmio-macro", "elmio-core", "elmio-cli"]
+members = ["elmio-cli", "elmio-core", "elmio-macro"]
 
 [workspace.package]
 authors = ["Success Kingsley <hello@xosnrdev.tech>"]

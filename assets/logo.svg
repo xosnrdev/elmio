@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+	<defs>
+		<!-- Unique gradients -->
+		<linearGradient id="rustFlow" x1="0%" y1="0%" x2="100%" y2="100%">
+			<stop offset="0%" stop-color="#FF4A00">
+				<animate attributeName="stop-color"
+					values="#FF4A00;#B83800;#FF4A00"
+					dur="3s"
+					repeatCount="indefinite" />
+			</stop>
+			<stop offset="100%" stop-color="#B83800">
+				<animate attributeName="stop-color"
+					values="#B83800;#FF4A00;#B83800"
+					dur="3s"
+					repeatCount="indefinite" />
+			</stop>
+		</linearGradient>
+
+		<!-- Abstract pattern -->
+		<pattern id="abstractPattern" x="0" y="0" width="10" height="10"
+			patternUnits="userSpaceOnUse">
+			<path d="M 0 5 L 5 0 M 10 5 L 5 10" stroke="#FF4A00" stroke-width="0.5" opacity="0.2" />
+		</pattern>
+
+		<!-- Glow filter -->
+		<filter id="softGlow">
+			<feGaussianBlur stdDeviation="1.5" result="glow" />
+			<feComposite in="SourceGraphic" in2="glow" operator="over" />
+		</filter>
+	</defs>
+
+	<!-- Main shape -->
+	<path
+		d="M120 40 C160 40, 200 80, 200 120 C200 160, 160 200, 120 200 C80 200, 40 160, 40 120 C40 80, 80 40, 120 40"
+		fill="none"
+		stroke="url(#rustFlow)"
+		stroke-width="3"
+		opacity="0.9">
+		<animate attributeName="d"
+			dur="6s"
+			repeatCount="indefinite"
+			values="M120 40 C160 40, 200 80, 200 120 C200 160, 160 200, 120 200 C80 200, 40 160, 40 120 C40 80, 80 40, 120 40;
+                    M120 40 C170 40, 200 70, 200 120 C200 170, 170 200, 120 200 C70 200, 40 170, 40 120 C40 70, 70 40, 120 40;
+                    M120 40 C160 40, 200 80, 200 120 C200 160, 160 200, 120 200 C80 200, 40 160, 40 120 C40 80, 80 40, 120 40" />
+	</path>
+
+	<!-- Inner elements -->
+	<g transform="translate(120 120)" filter="url(#softGlow)">
+		<!-- Dynamic arcs -->
+		<path d="M-30 0 A30 30 0 0 1 30 0"
+			fill="none"
+			stroke="#FF4A00"
+			stroke-width="2">
+			<animateTransform attributeName="transform"
+				type="rotate"
+				values="0;360"
+				dur="8s"
+				repeatCount="indefinite" />
+		</path>
+		<path d="M-20 0 A20 20 0 0 0 20 0"
+			fill="none"
+			stroke="#FF4A00"
+			stroke-width="2">
+			<animateTransform attributeName="transform"
+				type="rotate"
+				values="360;0"
+				dur="6s"
+				repeatCount="indefinite" />
+		</path>
+
+		<!-- Core element -->
+		<circle r="12" fill="#FF4A00">
+			<animate attributeName="r"
+				values="12;14;12"
+				dur="2s"
+				repeatCount="indefinite" />
+		</circle>
+
+		<!-- Floating particles -->
+		<g>
+			<circle r="3" fill="#FF4A00">
+				<animateMotion path="M0,0 A25,25 0 1,1 0,0.1"
+					dur="4s"
+					repeatCount="indefinite" />
+			</circle>
+			<circle r="3" fill="#FF4A00">
+				<animateMotion path="M0,0 A25,25 0 1,0 0,0.1"
+					dur="4s"
+					repeatCount="indefinite" />
+			</circle>
+		</g>
+	</g>
+
+	<!-- Abstract overlay -->
+	<circle cx="120" cy="120" r="80"
+		fill="url(#abstractPattern)"
+		opacity="0.1">
+		<animate attributeName="transform"
+			attributeType="XML"
+			type="rotate"
+			from="0 120 120"
+			to="360 120 120"
+			dur="20s"
+			repeatCount="indefinite" />
+	</circle>
+</svg>
