@@ -35,4 +35,4 @@ convert_case = "0.7.1"
 tempfile = "3.17.1"
 notify = "8.0.0"
 gitignored = "0.4.0"
-clap = { version = "4.5.30", features = ["derive"] }
+clap = { version = "4.5.31", features = ["derive"] }
