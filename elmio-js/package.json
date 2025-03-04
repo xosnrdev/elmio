@@ -26,9 +26,9 @@
 
     "devDependencies": {
         "@biomejs/biome": "1.9.4",
-        "happy-dom": "17.1.8",
+        "happy-dom": "17.1.9",
         "tsup": "8.4.0",
-        "typescript": "5.7.3",
+        "typescript": "5.8.2",
         "vitest": "3.0.7"
     },
     "engines": {
