@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 main() {
     local version
@@ -7,7 +7,7 @@ main() {
 
     check_git_clean
 
-    pnpm build
+    npm run build
 
     set_version "$version"
 

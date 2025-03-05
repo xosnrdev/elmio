@@ -1,6 +1,6 @@
 use crate::browser::dom_id::DomId;
-use crate::browser::effect::dom;
 use crate::browser::effect::Effect;
+use crate::browser::effect::dom;
 use crate::browser::keyboard::Key;
 use crate::browser::mouse::Button;
 use crate::browser::selector::Selector;

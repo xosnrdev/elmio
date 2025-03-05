@@ -1,7 +1,7 @@
 use std::{
     collections::HashSet,
     fmt,
-    sync::{atomic::AtomicBool, Arc, Mutex},
+    sync::{Arc, Mutex, atomic::AtomicBool},
 };
 
 use crate::commands::{

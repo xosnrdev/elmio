@@ -7,8 +7,8 @@ use std::{
     str::FromStr,
 };
 
-use base64::{prelude::BASE64_STANDARD, Engine};
-use http::{request, HeaderMap, HeaderName, HeaderValue, Request, Response};
+use base64::{Engine, prelude::BASE64_STANDARD};
+use http::{HeaderMap, HeaderName, HeaderValue, Request, Response, request};
 use mime_guess::Mime;
 
 use crate::commands::exec;

@@ -355,7 +355,7 @@ dependencies = [
 
 [[package]]
 name = "elmio-cli"
-version = "0.2.2"
+version = "0.2.3"
 dependencies = [
  "base64",
  "clap",
@@ -379,7 +379,7 @@ dependencies = [
 
 [[package]]
 name = "elmio-core"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "maud",
  "serde",
@@ -390,7 +390,7 @@ dependencies = [
 
 [[package]]
 name = "elmio-macro"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "quote",
  "syn",

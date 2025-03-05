@@ -4,9 +4,9 @@ members = ["elmio-cli", "elmio-core", "elmio-macro"]
 
 [workspace.package]
 authors = ["Success Kingsley <hello@xosnrdev.tech>"]
-license = "Apache-2.0"
+license = "MIT OR Apache-2.0"
 repository = "https://github.com/xosnrdev/elmio"
-edition = "2021"
+edition = "2024"
 
 [workspace.dependencies]
 serde = { version = "1.0.218", features = ["derive"] }
