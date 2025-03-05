@@ -1,41 +1,47 @@
 {
-    "name": "elmio-js",
-    "version": "1.0.2",
-    "description": "The Javascript runtime counterpart for elmio-rs. Uses morphdom to partially update the DOM.",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "type": "module",
-    "scripts": {
-        "fmt": "biome format --write .",
-        "check": "biome check --write .",
-        "fix": "biome check --fix .",
-        "test": "vitest",
-        "build": "tsup"
-    },
-    "keywords": ["morphdom", "javascript-runtime", "web-framework", "DOM"],
-    "author": "Success Kingsley <hello@xosnrdev.tech>",
-    "license": "MIT OR Apache-2.0",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/xosnrdev/elmio.git"
-    },
-    "files": ["dist"],
-    "bugs": {
-        "url": "https://github.com/xosnrdev/elmio/issues"
-    },
-
-    "devDependencies": {
-        "@biomejs/biome": "1.9.4",
-        "happy-dom": "17.1.9",
-        "tsup": "8.4.0",
-        "typescript": "5.8.2",
-        "vitest": "3.0.7"
-    },
-    "engines": {
-        "node": ">=20.11.0"
-    },
-    "dependencies": {
-        "fast-equals": "5.2.2",
-        "morphdom": "2.7.4"
-    }
+  "name": "elmio-js",
+  "version": "1.0.2",
+  "description": "The Javascript runtime counterpart for elmio-rs. Uses morphdom to partially update the DOM.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "fmt": "biome format --write .",
+    "check": "biome check --write .",
+    "fix": "biome check --fix .",
+    "test": "vitest",
+    "build": "tsup"
+  },
+  "keywords": [
+    "morphdom",
+    "javascript-runtime",
+    "web-framework",
+    "DOM"
+  ],
+  "author": "Success Kingsley <hello@xosnrdev.tech>",
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xosnrdev/elmio.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "bugs": {
+    "url": "https://github.com/xosnrdev/elmio/issues"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "happy-dom": "17.1.9",
+    "tsup": "8.4.0",
+    "typescript": "5.8.2",
+    "vitest": "3.0.7"
+  },
+  "engines": {
+    "node": ">=20.11.0"
+  },
+  "dependencies": {
+    "fast-equals": "5.2.2",
+    "morphdom": "2.7.4"
+  }
 }
