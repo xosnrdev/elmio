@@ -4,17 +4,13 @@ The JavaScript runtime component of the Elmio framework. Uses [morphdom](https:/
 
 ## Overview
 
-`elmio-js` is the JavaScript counterpart to the [elmio-rs](../elmio-rs/) Rust core. It provides the runtime layer that integrates with the functions exposed by the Rust component, handling tasks such as:
+`elmio-js` is the JavaScript counterpart to the [elmio-rs](https://github.com/xosnrdev/elmio/tree/master/elmio-rs) Rust core. It provides the runtime layer that integrates with the functions exposed by the Rust component, handling tasks such as:
 
 - Calling the Rust `init`, `view`, `update`, and `subscriptions` functions
 - Updating the DOM based on the view output
 - Setting up event listeners and handling messages
 - Managing the application's effects
 
-## Contributing
-
-Contributions to `elmio-js` are welcome. If you find any issues or have ideas for improvements, please feel free to submit them via the project's issue tracker or open a pull request.
-
 ## License
 
-`elmio-js` is licensed under the [Apache 2.0 License](LICENSE).
+[MIT](./LICENSE-MIT) OR [APACHE-2.0](./LICENSE-APACHE)
