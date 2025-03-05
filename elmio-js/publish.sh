@@ -7,7 +7,7 @@ main() {
 
     check_git_clean
 
-    npm build
+    npm run build
 
     set_version "$version"
 
