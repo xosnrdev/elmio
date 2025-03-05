@@ -1,7 +1,7 @@
 use std::time::Duration;
 
-use crate::browser::effect::effectful_msg::effectful_msg;
 use crate::browser::effect::Effect;
+use crate::browser::effect::effectful_msg::effectful_msg;
 
 #[derive(Clone, serde::Serialize, serde::Deserialize)]
 #[serde(tag = "type", content = "config")]

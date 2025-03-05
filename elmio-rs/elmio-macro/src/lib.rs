@@ -1,7 +1,7 @@
 use proc_macro::TokenStream;
 use quote::quote;
 use syn::DeriveInput;
-use syn::{parse_macro_input, Ident};
+use syn::{Ident, parse_macro_input};
 
 #[proc_macro_derive(DomId)]
 pub fn dom_id_derive(input: TokenStream) -> TokenStream {

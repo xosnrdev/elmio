@@ -3,7 +3,7 @@ use std::{
     process,
 };
 
-use clap::{command, Parser, Subcommand};
+use clap::{Parser, Subcommand, command};
 use elmio_cli::{
     builders::{
         backlog_builder::{self, BacklogBuilder},

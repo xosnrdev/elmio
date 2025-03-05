@@ -6,8 +6,8 @@ use std::{
 use fs_extra::file::read_to_string;
 use gitignored::Gitignore;
 use notify::{
-    event::{CreateKind, DataChange, ModifyKind},
     Event, EventKind, RecursiveMode, Watcher,
+    event::{CreateKind, DataChange, ModifyKind},
 };
 
 use crate::builders::backlog_builder::{self, BacklogBuilder, ChangeType};

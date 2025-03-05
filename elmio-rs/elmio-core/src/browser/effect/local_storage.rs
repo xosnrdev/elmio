@@ -1,6 +1,6 @@
 use crate::browser;
-use crate::browser::effect::effectful_msg::effectful_msg;
 use crate::browser::effect::Effect;
+use crate::browser::effect::effectful_msg::effectful_msg;
 use crate::browser::value::Capture;
 use crate::browser::value::Value;
 
