@@ -1,6 +1,6 @@
 [package]
 name = "elmio-core"
-version = "0.2.0"
+version = "0.2.1"
 edition.workspace = true
 categories = ["wasm", "web-programming"]
 keywords = ["web", "framework", "elm-architecture", "webassembly"]
