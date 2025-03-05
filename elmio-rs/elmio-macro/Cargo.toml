@@ -5,6 +5,8 @@ edition.workspace = true
 categories = ["wasm", "web-programming"]
 keywords = ["procedural-macro", "elm-architecture", "webassembly"]
 description = "Procedural macros for the Elmio framework."
+license.workspace = true
+repository.workspace = true
 
 [lib]
 proc-macro = true
