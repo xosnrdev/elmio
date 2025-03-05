@@ -1,6 +1,6 @@
 {
   "name": "elmio-js",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "The Javascript runtime counterpart for elmio-rs. Uses morphdom to partially update the DOM.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
