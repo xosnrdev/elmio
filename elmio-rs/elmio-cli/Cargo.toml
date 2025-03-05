@@ -4,9 +4,7 @@ version = "0.2.2"
 edition.workspace = true
 categories = ["command-line-utilities", "web-programming", "development-tools"]
 keywords = ["cli-tools", "web-development"]
-description = """
-CLI helper tool for working with elmio projects.
-"""
+description = "CLI helper tool for working with elmio projects."
 license.workspace = true
 repository.workspace = true
 
