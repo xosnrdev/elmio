@@ -17,6 +17,7 @@
             pkgs.cargo-release
             pkgs.cargo-edit
             pkgs.cargo-dist
+            pkgs.nodejs
           ];
           shellHook = ''
             export RUST_BACKTRACE=1
