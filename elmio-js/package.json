@@ -14,7 +14,7 @@
     },
     "keywords": ["morphdom", "javascript-runtime", "web-framework", "DOM"],
     "author": "Success Kingsley <hello@xosnrdev.tech>",
-    "license": "Apache-2.0",
+    "license": "MIT OR Apache-2.0",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/xosnrdev/elmio.git"
