@@ -4,8 +4,7 @@
     </a>
     <h1 align="center">Elmio</h1>
     <p>
-        A lightweight proof-of-concept web framework loosely inspired by <a href="[text](https://guide.elm-lang.org/architecture/)">The Elm Architecture<a>.
-        It's built using the Rust programming language and compiles to WebAssembly.
+        A lightweight POC web framework for rust compiles to WebAssembly. Loosely inspired by <a href="[text](https://guide.elm-lang.org/architecture/)">The Elm Architecture<a>
     </p>
 </div>
 
