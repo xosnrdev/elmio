@@ -32,10 +32,10 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "happy-dom": "17.1.9",
+    "happy-dom": "17.2.2",
     "tsup": "8.4.0",
     "typescript": "5.8.2",
-    "vitest": "3.0.7"
+    "vitest": "3.0.8"
   },
   "engines": {
     "node": ">=20.11.0"
