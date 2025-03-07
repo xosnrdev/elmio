@@ -24,6 +24,6 @@
         "node": ">=20.11.0"
     },
     "dependencies": {
-        "elmio-js": "1.0.2"
+        "elmio-js": "1.0.3"
     }
 }
