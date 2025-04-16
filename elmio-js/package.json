@@ -42,6 +42,6 @@
   },
   "dependencies": {
     "fast-equals": "5.2.2",
-    "morphdom": "2.7.4"
+    "morphdom": "2.7.5"
   }
 }
